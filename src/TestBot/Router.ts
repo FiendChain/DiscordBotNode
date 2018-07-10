@@ -1,4 +1,3 @@
-import * as Discord from 'discord.io';
 import { TestBot } from './TestBot';
 
 interface BotList {
@@ -9,14 +8,12 @@ export class Router {
     private botList: BotList = {};
     
 
-    constructor(
-        private server: Discord.Client
-    ) {}
+    constructor() {}
 
     private fetchBot(channelID: string): TestBot {
         if(this.botList[channelID] === undefined) {
             this.botList[channelID] = new TestBot(channelID);
-            console.log('Created bot: ', this.botList[channelID]);
+            console.log(`Created bot for ${channelID}`);
         }
         return this.botList[channelID];
     }
@@ -27,7 +24,7 @@ export class Router {
         var bot: TestBot = this.fetchBot(channelID);
         if(message.substring(0, 1) == '!') {
             var args: string[] = message.substring(1).split(" ");
-            bot.commands(this.server, user, userID, args, event);
+            bot.commands(user, userID, args, event);
         }
     }
 }
