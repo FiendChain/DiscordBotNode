@@ -17,14 +17,3 @@ server.on('ready', function (evt) {
 });
 
 server.on('message', router.routes.bind(router));
-// server.on('message', routes);
-
-function routes(user: string, userID: string, channelID: string, 
-                message: string, event: WebSocketEventMap): void {
-    setInterval(() => {
-        server.sendMessage({
-            to: channelID,
-            message: `<@${userID}> Dicks out for ${user}!`,
-        });
-    }, 1000);
-}

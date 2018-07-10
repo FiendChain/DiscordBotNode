@@ -8,11 +8,19 @@ export class Pong {
     private board: string[][];
     
     constructor(
-        private users: PongUser[],
+        private users: PongUser[] = [],
         private rowSize: number = 3,
         private colSize: number = 3,
     ) {
         this.initBoard(rowSize, colSize);
+    }
+
+    public addUser(user: PongUser): void {
+        var filteredUsers: PongUser[] = this.users.filter((currUser) => currUser.id == user.id);
+        if(filteredUsers.length > 0) {
+            throw "You have already registered!"
+        }
+        this.users.push(user);
     }
 
     public placePiece(userID: string, rowString: string, colString: string): void {
