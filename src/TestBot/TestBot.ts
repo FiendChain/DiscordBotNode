@@ -85,7 +85,7 @@ export class TestBot {
 
     private parseMath(answer: string, userID: string): string {
         if(answer) {
-            return this.mathTest.sendAnswer(answer);
+            return `<@${userID}> ${this.mathTest.sendAnswer(answer)}`;
         } else {
             return this.mathTest.start(this.channelID);
         }

@@ -1,5 +1,4 @@
 import { server } from "../server";
-import { BADQUERY } from "dns";
 
 export class MathTest {
     private question: string;
@@ -10,9 +9,10 @@ export class MathTest {
     public start(channelID: string, difficulty: number = 5): string {
         if(!this.running) {
             var difficulty: number = this.generateQuestion();
-            this.timeout = setTimeout(() => this.end(channelID), (difficulty^2)*1000);
+            var duration: number = Math.pow(difficulty+2, 3);
+            this.timeout = setTimeout(() => this.end(channelID), duration*1000);
             this.running = true;
-            return this.question;
+            return `\"${this.question}\" with ${duration} seconds`;
         } else {
             return "Game is currently in session!";
         }
@@ -44,6 +44,12 @@ export class MathTest {
     }
 
     private generateQuestion(): number {
+        var isJoke: boolean = Math.random() > 0.5;
+        if(isJoke) return this.generateJokeQuestion();
+        else       return this.generateNormalQuestion();
+    }
+
+    private generateNormalQuestion(): number {
         function getExpression(a?: string | number, b?: string | number): string {
             const operands = ["*", "+", "/", "-"];
             function setVariable(variable: string | number): string | number {
@@ -56,8 +62,7 @@ export class MathTest {
             return `${a} ${op} ${b}`;
         }
 
-        // var difficulty = Math.floor(Math.random()*3);
-        var difficulty = 5;
+        var difficulty = Math.floor(Math.random()*3);
         var question: string = getExpression();
         for(var i = 0; i < difficulty; i++) {
             question = getExpression(getExpression(), question);
@@ -67,5 +72,11 @@ export class MathTest {
         this.answer = eval(question);
 
         return difficulty;
+    }
+
+    private generateJokeQuestion(): number {
+        this.question = "9 + 10";
+        this.answer = "21";
+        return 1;
     }
 }
